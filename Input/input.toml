@@ -1,0 +1,136 @@
+[general]
+
+    dss_path="/Volumes/le41/bronze/files/models/low-voltage-systems/202012/63/dss.zip"
+  
+[loadflow]
+
+    # Substation
+    sub = 'TAQ' #'KMO'
+
+    # Distribution feeder
+    feeder = 'TAQ03' # 'KMO06'
+
+    # Low voltage system
+    # uni_tr_mt = '34102241' # '55349662' # Comment to run the medium voltage.
+
+    # Vsource
+    vsource = 1.035
+
+    # OpenDSS step size (hour)
+    stepsize = 0.25
+
+    # Potência de base
+    # kva_base = 10 # Comente para ignorar
+
+    # Randomize power factors
+    power_factor = [0.85, 0.95]
+
+
+[irregs]
+
+    # Number of irreg customers
+    num_irregs = 0
+
+    # min/max kW range for NTL
+    kw_range = [1.5, 2.5]
+
+    # Randomize power factors
+    power_factor = [0.85, 1.00] # Comment to use unitary power factor
+
+    # NTL loadshape (fixed | synthetic)
+    loadshape = 'fixed'
+
+    # [Optional] NTL init/end
+    ntl_period = [17, 21]
+
+    # Allows energy theft in training set
+    theft_on_training = false
+
+
+[simulation]
+
+    # Number of days simulated
+    num_days = 46
+
+    # Num of days for training
+    days_for_training = 15
+
+    # Minimum number of days with ntl
+    minimum_ntl_days = 10 
+
+    # Evaluate trafo meas
+    trafo_meas = false
+
+    # Evaluate substation meas
+    se_meas = false
+
+    # Public light
+    public_light = false
+
+    # Input data
+    input_data = ['active_power', 'reactive_power']
+
+    # Gaussian noise
+    [simulation.noise] # Classe A
+        verror = 0.075 # voltage errors in %
+        perror = 0.500 # active power errors in %
+        qerror = 0.600 # reactive power errors in %
+    
+    # Batch sizes
+    [simulation.batch_sizes]
+        training = 32
+        validation = 32
+
+    # Shufle dataloaders
+    [simulation.shuffle]
+        training = true
+        validation = true
+
+
+[MLP]
+
+    # Loss function
+    # MSE | SmoothL1Loss
+    loss_function = 'MSE'
+
+    # Learning rate
+    learning_rate = 1e-3
+
+    # Num of epochs
+    num_epochs = 500
+
+    # Early stop
+    early_stop = 10 # epochs for patience, comment to ignore it
+    
+    # Hidden layers sizes
+    hidden_layers = [10]
+
+    # Activation function in hidden layers
+    activation_function = 'ELU'
+
+    # Dropout in hidden layers
+    # dropout = 0.025
+
+    # L2 regularization
+    # weight_decay = 0.00
+
+    # Batch normalization (deep networks)
+    batch_norm = false
+
+    # He initialization
+    he_init = false
+
+    [MLP.split_sizes]
+        test_size = 0.20
+        val_size = 0.20
+    
+    [MLP.shuffle]
+        train = true
+        test = true
+        val = true
+
+    [MLP.batch_sizes]
+        train = 32
+        test = 32
+        val = 16
+    
